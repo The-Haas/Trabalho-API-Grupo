@@ -1,5 +1,28 @@
 {
   "dependencies": {
-    "express": "^5.1.0"
-  }
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.15.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "name": "trabalho-api-grupo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/The-Haas/Trabalho-API-Grupo.git"
+  },
+  "keywords": [],
+  "author": "Igor Haas - igordhaas@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/The-Haas/Trabalho-API-Grupo/issues"
+  },
+  "homepage": "https://github.com/The-Haas/Trabalho-API-Grupo#readme",
+  "description": ""
 }
