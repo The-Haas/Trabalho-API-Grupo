@@ -5,7 +5,7 @@ async function getFilmes() {
     try {
         const result = await db.query('SELECT * FROM filmes');
         return result.rows;
-        
+
     }
     catch (e) {
         console.error('Erro ao buscar filmes:', e);
@@ -13,6 +13,44 @@ async function getFilmes() {
     }
 }
 
+async function getFilmesFiltros(titulo, ano, genero) {
+    try {
+        let query = 'SELECT f.*, g.NOME_GENERO FROM filmes f JOIN genero g ON f.id_genero = g.id_genero WHERE 1=1';
+        let params = [];
+
+        // Se o título for fornecido, adiciona o filtro de título
+        if (titulo) {
+            query += ' AND f.TITULO_FILME ILIKE $' + (params.length + 1);
+            params.push(`%${titulo}%`);
+        }
+
+        // Se o ano for fornecido, adiciona o filtro de ano
+        if (ano) {
+            query += ' AND EXTRACT(YEAR FROM f.DATA_LANCAMENTO) = $' + (params.length + 1);
+            params.push(ano);
+        }
+
+        // Se o gênero for fornecido, adiciona o filtro de gênero
+        if (genero) {
+            query += ' AND g.NOME_GENERO ILIKE $' + (params.length + 1);
+            params.push(`%${genero}%`);
+        }
+
+        // Executa a consulta com os parâmetros dinâmicos
+        const result = await db.query(query, params);
+        return result.rows;
+    } catch (e) {
+        console.error('Erro ao buscar filmes:', e);
+        throw e;
+    }
+}
+
+
+
+
+
+//Funçao para retornar todas as series
+// A função retorna um objeto JSON com as informações de cada série, incluindo suas temporadas e episódios
 async function getSerie() {
 
     try {
@@ -41,7 +79,7 @@ async function getSerie() {
                                         ORDER BY SERIES.ID_SERIE;
                                      `);
         return result.rows;
-        
+
     }
     catch (e) {
         console.error('Erro ao buscar series:', e);
@@ -49,7 +87,12 @@ async function getSerie() {
     }
 }
 
+
+
+
+// Exporta as funções para serem usadas em outros arquivos
 module.exports = {
     getFilmes,
     getSerie,
+    getFilmesFiltros,
 };
