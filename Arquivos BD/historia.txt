@@ -1,0 +1,4 @@
+João sempre curtiu um bom filme, daqueles com ação bruta, explosão e adrenalina do início ao fim. 
+Mas ele se irritava toda vez que abria os catálogos das plataformas e só via comédia romântica e drama sem graça. 
+Cansado dessa palhaçada, meteu a mão no teclado, escreveu do zero uma API parruda que puxava filmes e séries direto do banco de dados que ele mantém. 
+Agora, quando quer assistir algo decente, é só consultar a API que ele mesmo forjou na raça — porque esperar pelos outros nunca foi o estilo dele.
