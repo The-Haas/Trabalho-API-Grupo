@@ -12,5 +12,6 @@ app.use(express.json());
 require('./routes')(app);
 
 app.listen(PORT, () => {
-    console.log('API Rodando na porta 3000');
+    console.log('API Rodando na porta ' + PORT);
+    console.log('Acesse: http://localhost:' + PORT);
 });
