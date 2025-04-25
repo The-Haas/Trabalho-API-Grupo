@@ -5,4 +5,5 @@ module.exports = (app) => {
     app.get('/filmes', controller.getFilmes)
     app.get('/series', controller.getSerie)
     app.get('/filmes/filtros', controller.getFilmesFiltros)
+    app.get('/series/filtros', controller.getSeriesFiltros)
 };

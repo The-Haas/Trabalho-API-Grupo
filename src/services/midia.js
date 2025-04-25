@@ -3,7 +3,15 @@ const db = require('../config');
 //função para retornar todos os filmes
 async function getFilmes() {
     try {
-        const result = await db.query('SELECT * FROM filmes');
+        const result = await db.query(`SELECT f.ID_FILME,
+                                       		  f.TITULO_FILME,
+                                       		  f.DURACAO_FILME,
+                                       		  f.SINOPSE_FILME,
+                                       		  TO_CHAR(f.DATA_LANCAMENTO, 'DD/MM/YYYY') AS DATA_LANCAMENTO,
+                                       		  g.NOME_GENERO
+                                       FROM FILMES f
+                                       JOIN GENERO g ON f.ID_GENERO = g.ID_GENERO;
+                                     `);
         return result.rows;
 
     }
@@ -15,7 +23,14 @@ async function getFilmes() {
 
 async function getFilmesFiltros(titulo, ano, genero) {
     try {
-        let query = 'SELECT f.*, g.NOME_GENERO FROM filmes f JOIN genero g ON f.id_genero = g.id_genero WHERE 1=1';
+        let query = `SELECT f.ID_FILME,
+                        f.TITULO_FILME,
+                        f.DURACAO_FILME,
+                        f.SINOPSE_FILME,
+                        TO_CHAR(f.DATA_LANCAMENTO, 'DD/MM/YYYY') AS DATA_LANCAMENTO,
+                        g.NOME_GENERO 
+                     FROM filmes f 
+                     JOIN genero g ON f.id_genero = g.id_genero WHERE 1=1`;
         let params = [];
 
         // Se o título for fornecido, adiciona o filtro de título
@@ -55,28 +70,32 @@ async function getSerie() {
 
     try {
         const result = await db.query(` SELECT 
-                                            SERIES.ID_SERIE,
-                                            SERIES.TITULO_SERIE,
+                                            s.ID_SERIE,
+                                            s.TITULO_SERIE,
+                                            s.SINOPSE_SERIE,
+                                            TO_CHAR(s.DATA_LANCAMENTO, 'DD/MM/YYYY') AS DATA_LANCAMENTO,
+                                            g.NOME_GENERO,
                                             json_agg(
                                                 json_build_object(
-                                                    'numero_temporada', TEMPORADAS.NUMERO_TEMPORADA,
+                                                    'numero_temporada', t.NUMERO_TEMPORADA,
                                                     'episodios', (
                                                         SELECT json_agg(
                                                             json_build_object(
-                                                                'numero_episodio', EPISODIOS.NUMERO_EPISODIO,
-                                                                'titulo_episodio', EPISODIOS.TITULO_EPISODIO,
-                                                                'duracao_episodio', EPISODIOS.DURACAO_EPISODIO
+                                                                'numero_episodio', e.NUMERO_EPISODIO,
+                                                                'titulo_episodio', e.TITULO_EPISODIO,
+                                                                'duracao_episodio', e.DURACAO_EPISODIO
                                                             )
                                                         )
-                                                        FROM EPISODIOS
-                                                        WHERE EPISODIOS.ID_TEMPORADA = TEMPORADAS.ID_TEMPORADA
+                                                        FROM EPISODIOS e
+                                                        WHERE e.ID_TEMPORADA = t.ID_TEMPORADA
                                                     )
                                                 )
                                             ) AS temporadas
-                                        FROM SERIES
-                                        JOIN TEMPORADAS ON SERIES.ID_SERIE = TEMPORADAS.ID_SERIE
-                                        GROUP BY SERIES.ID_SERIE, SERIES.TITULO_SERIE
-                                        ORDER BY SERIES.ID_SERIE;
+                                        FROM SERIES s
+                                        JOIN GENERO g ON s.ID_GENERO = g.ID_GENERO
+                                        JOIN TEMPORADAS t ON s.ID_SERIE = t.ID_SERIE
+                                        GROUP BY s.ID_SERIE, s.TITULO_SERIE, s.DATA_LANCAMENTO, g.NOME_GENERO
+                                        ORDER BY s.ID_SERIE
                                      `);
         return result.rows;
 
@@ -87,6 +106,67 @@ async function getSerie() {
     }
 }
 
+async function getSeriesFiltros(titulo, ano, genero) {
+    try {
+        let query = `
+            SELECT 
+                s.ID_SERIE,
+                s.TITULO_SERIE,
+                s.SINOPSE_SERIE,
+                TO_CHAR(s.DATA_LANCAMENTO, 'DD/MM/YYYY') AS DATA_LANCAMENTO,
+                g.NOME_GENERO,
+                json_agg(
+                    json_build_object(
+                        'numero_temporada', t.NUMERO_TEMPORADA,
+                        'episodios', (
+                            SELECT json_agg(
+                                json_build_object(
+                                    'numero_episodio', e.NUMERO_EPISODIO,
+                                    'titulo_episodio', e.TITULO_EPISODIO,
+                                    'duracao_episodio', e.DURACAO_EPISODIO
+                                )
+                            )
+                            FROM EPISODIOS e
+                            WHERE e.ID_TEMPORADA = t.ID_TEMPORADA
+                        )
+                    )
+                ) AS temporadas
+            FROM SERIES s
+            JOIN GENERO g ON s.ID_GENERO = g.ID_GENERO
+            JOIN TEMPORADAS t ON s.ID_SERIE = t.ID_SERIE
+            WHERE 1=1
+        `;
+
+        let params = [];
+
+        if (titulo) {
+            query += ' AND s.TITULO_SERIE ILIKE $' + (params.length + 1);
+            params.push(`%${titulo}%`);
+        }
+
+        if (ano) {
+            query += ' AND EXTRACT(YEAR FROM s.DATA_LANCAMENTO) = $' + (params.length + 1);
+            params.push(ano);
+        }
+
+        if (genero) {
+            query += ' AND g.NOME_GENERO ILIKE $' + (params.length + 1);
+            params.push(`%${genero}%`);
+        }
+
+        query += `
+            GROUP BY s.ID_SERIE, s.TITULO_SERIE, s.DATA_LANCAMENTO, g.NOME_GENERO
+            ORDER BY s.ID_SERIE
+        `;
+
+        const result = await db.query(query, params);
+        return result.rows;
+
+    } catch (e) {
+        console.error('Erro ao buscar séries com filtros:', e);
+        throw e;
+    }
+}
 
 
 
@@ -95,4 +175,5 @@ module.exports = {
     getFilmes,
     getSerie,
     getFilmesFiltros,
+    getSeriesFiltros,
 };

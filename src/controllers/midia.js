@@ -28,8 +28,26 @@ async function getSerie(req, res) {
     return res.status(200).json(series);
 }
 
+async function getSeriesFiltros(req, res) {
+
+    const titulo = req.query.titulo;
+    const ano = req.query.ano;
+    const genero = req.query.genero;
+
+    let series = await service.getSeriesFiltros(titulo, ano, genero);
+
+    // Verifica se o array de series está vazio
+    if (series.length === 0) {
+        // Retorna status 404 e uma mensagem de erro
+        return res.status(404).json({ message: 'Nenhuma série encontrada com os filtros fornecidos.' });
+    }
+    return res.status(200).json(series);
+
+}
+
 module.exports = {
     getFilmes,
     getSerie,
     getFilmesFiltros,
+    getSeriesFiltros,
 };
