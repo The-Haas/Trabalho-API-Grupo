@@ -14,8 +14,7 @@ app.use(express.json());
 
 // Middleware para capturar as requisições e logar as informações
 app.use((req, res, next) => {
-    logMonitor(req); // Chama a função logMonitor para registrar o log
-    next(); // Passa para o próximo middleware ou rota
+    logMonitor(req, res, next); // agora passando tudo corretamente
 });
 
 require('./routes')(app);
