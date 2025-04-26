@@ -1,0 +1,159 @@
+**Exemplo de Rotas da API**
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Retornar todos os Filmes do BD
+    (Retorna um Json com o objeto filme e todos os seus dados)
+
+    Rota: http://localhost:3000/filmes (Método GET)
+
+    Exemplo de Retorno:
+    [
+        {
+            "id_filme": 1,
+            "titulo_filme": "teste",
+            "duracao_filme": 120,
+            "sinopse_filme": "Um agente secreto enfrenta sua maior missão.",
+            "data_lancamento": "20/05/2020",
+            "nome_genero": "Ação"
+        },
+    ]
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Retornar todos os Filmes de acordo com os filtros passados pela query(url)
+    (Retorna um Json com o Objeto Filme e todos os seus dados)
+                                                                                            
+    Rota Exemplo: http://localhost:3000/filmes/filtros?titulo=teste&ano=2020&genero=ação (Método GET)
+
+    Filtros Disponíveis para pesquisa (titulo: Nome do Filme 
+                                       ano: Ano de Lançamento do Filme
+                                       genero: Genêro do Filme)
+
+    Obs. Caso não passar nenhum filtro pela query, irá retornar todos os filmes.
+    Obs. A ordem dos filtros passados pela query não interfere no resultado, portanto, a pesquisa por filtro é modular.
+
+    Exemplo de Retorno:
+    [
+        {
+            "id_filme": 1,
+            "titulo_filme": "teste",
+            "duracao_filme": 120,
+            "sinopse_filme": "Um agente secreto enfrenta sua maior missão.",
+            "data_lancamento": "20/05/2020",
+            "nome_genero": "Ação"
+        },
+    ]
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Retornar todas as Séries do BD
+    (Retorna um Json com o Objeto Séries e todos os seus dados,
+     Dentro do Objeto Séries vai retornar outro Objeto com as Temporadas e seus dados,
+     Dentro do Objeto Temporadas vai retornar outro Objeto com os Episódios e seus dados)
+
+    Rota: http://localhost:3000/series (Método GET)
+
+    Exemplo de Retorno: 
+    [
+        {
+            "id_serie": 1,
+            "titulo_serie": "Agentes do Caos",
+            "sinopse_serie": "Agentes secretos combatem conspirações.",
+            "data_lancamento": "10/09/2017",
+            "nome_genero": "Ação",
+            "temporadas": [
+                {
+                    "numero_temporada": 1,
+                    "episodios": [
+                        {
+                            "numero_episodio": 1,
+                            "titulo_episodio": "Início do Caos",
+                            "duracao_episodio": 45
+                        },
+                        {
+                            "numero_episodio": 2,
+                            "titulo_episodio": "teste de episodio 2",
+                            "duracao_episodio": 30
+                        }
+                    ]
+                },
+                {
+                    "numero_temporada": 2,
+                    "episodios": [
+                        {
+                            "numero_episodio": 1,
+                            "titulo_episodio": "teste temp 2",
+                            "duracao_episodio": 45
+                        },
+                        {
+                            "numero_episodio": 2,
+                            "titulo_episodio": "teste temp 21",
+                            "duracao_episodio": 50
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+
+    --------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Retornar todas as Séries do BD de acordo com os filtros passados pela query (url)
+    (Retorna um Json com o Objeto Séries e todos os seus dados,
+     Dentro do Objeto Séries vai retornar outro Objeto com as Temporadas e seus dados,
+     Dentro do Objeto Temporadas vai retornar outro Objeto com os Episódios e seus dados)
+
+    Rota Exemplo: http://localhost:3000/series/filtros?ano=2017&genero=ação&titulo=agente (Método GET)
+    
+    Filtros Disponíveis para pesquisa (titulo: Nome da Série 
+                                       ano: Ano de Lançamento da Série
+                                       genero: Genêro da Série)
+
+    Obs. Caso não passar nenhum filtro pela query, irá retornar todos as séries.
+    Obs. A ordem dos filtros passados pela query não interfere no resultado, portanto, a pesquisa por filtro é modular.
+
+    Exemplo de Retorno:
+    [
+        {
+            "id_serie": 1,
+            "titulo_serie": "Agentes do Caos",
+            "sinopse_serie": "Agentes secretos combatem conspirações.",
+            "data_lancamento": "10/09/2017",
+            "nome_genero": "Ação",
+            "temporadas": [
+                {
+                    "numero_temporada": 1,
+                    "episodios": [
+                        {
+                            "numero_episodio": 1,
+                            "titulo_episodio": "Início do Caos",
+                            "duracao_episodio": 45
+                        },
+                        {
+                            "numero_episodio": 2,
+                            "titulo_episodio": "teste de episodio 2",
+                            "duracao_episodio": 30
+                        }
+                    ]
+                },
+                {
+                    "numero_temporada": 2,
+                    "episodios": [
+                        {
+                            "numero_episodio": 1,
+                            "titulo_episodio": "teste temp 2",
+                            "duracao_episodio": 45
+                        },
+                        {
+                            "numero_episodio": 2,
+                            "titulo_episodio": "teste temp 21",
+                            "duracao_episodio": 50
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+
+--------------------------------------------------------------------------------------------------------------------------------
