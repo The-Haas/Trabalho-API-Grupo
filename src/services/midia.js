@@ -169,6 +169,54 @@ async function getSeriesFiltros(titulo, ano, genero) {
 }
 
 
+// Função para inserir filme
+async function inserirFilme(titulo, duracao, sinopse, data_lancamento, nome_genero) {
+    try {
+        // Primeiro, buscar o ID do gênero pelo nome
+        const generoResult = await db.query(`
+            SELECT ID_GENERO 
+            FROM GENERO 
+            WHERE NOME_GENERO = $1
+        `, [nome_genero]);
+
+        if (generoResult.rowCount === 0) {
+            throw new Error(`Gênero "${nome_genero}" não encontrado. Filme não inserido.`);
+        }
+
+        const id_genero = generoResult.rows[0].id_genero;
+
+        // Verificar se o filme já existe (comparando pelo título, e opcionalmente, também pela data de lançamento)
+        const filmeExistente = await db.query(`
+            SELECT ID_FILME 
+            FROM FILMES 
+            WHERE TITULO_FILME = $1
+        `, [titulo]);
+
+        if (filmeExistente.rowCount > 0) {
+            throw new Error(`Filme "${titulo}" já cadastrado. Não foi possível inserir novamente.`);
+        }
+
+        // Inserir o filme com o ID do gênero encontrado
+        const insertResult = await db.query(`
+            INSERT INTO FILMES (TITULO_FILME, DURACAO_FILME, SINOPSE_FILME, DATA_LANCAMENTO, ID_GENERO)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING ID_FILME;
+        `, [titulo, duracao, sinopse, data_lancamento, id_genero]);
+
+        return { 
+            mensagem: `Filme inserido com sucesso!`, 
+            id_filme: insertResult.rows[0].id_filme 
+        };
+
+    } catch (e) {
+        console.error('Erro ao inserir filme:', e.message);
+        throw e;
+    }
+}
+
+
+//fazer a function para inserir os generos
+
 
 // Exporta as funções para serem usadas em outros arquivos
 module.exports = {
@@ -176,4 +224,5 @@ module.exports = {
     getSerie,
     getFilmesFiltros,
     getSeriesFiltros,
+    inserirFilme,
 };

@@ -45,9 +45,23 @@ async function getSeriesFiltros(req, res) {
 
 }
 
+async function inserirFilme(req, res) {
+    const { titulo, duracao, sinopse, data_lancamento, nome_genero } = req.body;
+
+    try {
+        const result = await service.inserirFilme(titulo, duracao, sinopse, data_lancamento, nome_genero);
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error('Erro ao inserir filme:', error);
+        return res.status(500).json({ error: 'Erro ao inserir filme' });
+    }
+}
+
+
 module.exports = {
     getFilmes,
     getSerie,
     getFilmesFiltros,
     getSeriesFiltros,
+    inserirFilme,
 };
