@@ -247,6 +247,28 @@ async function inserirFilme(titulo, duracao, sinopse, data_lancamento, nome_gene
 }
 
 
+/*
+*Rotas e Funções a Finalizar
+
+* Inserir Filmes (Revisar)
+* Inserir Series
+* Inserir Temporadas
+* Inserir Episodios
+* Inserir Generos
+
+* Editar Filmes
+* Editar Series
+* Editar Temporadas
+* Editar Episodios
+* Editar Generos
+
+* Deletar Filmes
+* Deletar Series
+* Deletar Temporadas
+* Deletar Episodios
+* Deletar Generos
+*/
+
 
 // Exporta as funções para serem usadas em outros arquivos
 module.exports = {
