@@ -45,6 +45,18 @@ async function getSeriesFiltros(req, res) {
 
 }
 
+// Função para listar todos os generos
+async function listarGeneros(req, res) {
+    try {
+        const generos = await service.listarGeneros();
+        return res.status(200).json(generos);
+    } catch (error) {
+        console.error('Erro ao listar gêneros:', error);
+        return res.status(500).json({ error: 'Erro ao listar gêneros' });
+    }
+}
+
+
 async function inserirFilme(req, res) {
     const { titulo, duracao, sinopse, data_lancamento, nome_genero } = req.body;
 
@@ -64,4 +76,5 @@ module.exports = {
     getFilmesFiltros,
     getSeriesFiltros,
     inserirFilme,
+    listarGeneros,
 };

@@ -158,21 +158,17 @@
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-Rota para Inserir novos filmes no BD de acordo com os dados passados pelo body
+    Rota para Retornar todos os Gêneros do BD
+    (Retorna um Json com o objeto Gênero)
 
-    Rota Exemplo: http://localhost:3000/filmes/ (Método POST)
+    Rota: http://localhost:3000/generos (Método GET)
 
-    Exemplo de Json para Inserção
+    Exemplo de Retorno:
+  [
     {
-        "titulo": "Testee",
-        "duracao": 136,
-        "sinopse": "Um hacker descobre a verdade sobre sua realidade.",
-        "data_lancamento": "1999-03-31",
+        "id_genero": 1,
         "nome_genero": "Ação"
-    }
+    },
+  ]
 
-Exemplo de Retorno: 
-{
-    "mensagem": "Filme inserido com sucesso!",
-    "id_filme": 57
-}
+  --------------------------------------------------------------------------------------------------------------------------------

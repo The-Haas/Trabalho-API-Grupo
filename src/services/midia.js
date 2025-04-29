@@ -168,6 +168,17 @@ async function getSeriesFiltros(titulo, ano, genero) {
     }
 }
 
+// Função para listar todos os gêneros
+async function listarGeneros() {
+    try {
+        const result = await db.query(`SELECT * FROM GENERO`);
+        return result.rows;
+    } catch (e) {
+        console.error('Erro ao listar gêneros:', e);
+        throw e;
+    }
+}
+
 
 // Função para inserir filme
 async function inserirFilme(titulo, duracao, sinopse, data_lancamento, nome_genero) {
@@ -215,8 +226,6 @@ async function inserirFilme(titulo, duracao, sinopse, data_lancamento, nome_gene
 }
 
 
-//fazer a function para inserir os generos
-
 
 // Exporta as funções para serem usadas em outros arquivos
 module.exports = {
@@ -225,4 +234,5 @@ module.exports = {
     getFilmesFiltros,
     getSeriesFiltros,
     inserirFilme,
+    listarGeneros,
 };
