@@ -6,7 +6,8 @@ module.exports = (app) => {
     app.get('/series', controller.getSerie)
     app.get('/filmes/filtros', controller.getFilmesFiltros)
     app.get('/series/filtros', controller.getSeriesFiltros)
-    app.get('/generos', controller.listarGeneros)
-
+    app.get('/generos', controller.getGeneros)
+    app.get('/generos/nome', controller.getGenerosNome)
+    
     app.post('/filmes', controller.inserirFilme)
 };

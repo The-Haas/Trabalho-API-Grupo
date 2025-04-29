@@ -172,3 +172,13 @@
   ]
 
   --------------------------------------------------------------------------------------------------------------------------------
+
+      Rota para Retornar os Gêneros por nome 
+    (Retorna um Json com o id do gênero)
+
+    Rota: http://localhost:3000/generos/nome?nome_genero=romance (Método GET)
+
+    Exemplo de Retorno:
+    {
+        "id_genero": 6
+    }

@@ -169,7 +169,7 @@ async function getSeriesFiltros(titulo, ano, genero) {
 }
 
 // Função para listar todos os gêneros
-async function listarGeneros() {
+async function getGeneros() {
     try {
         const result = await db.query(`SELECT * FROM GENERO`);
         return result.rows;
@@ -178,6 +178,27 @@ async function listarGeneros() {
         throw e;
     }
 }
+
+// Função para listar os gêneros por nome
+async function getGenerosNome(nome_genero) {
+    try {
+        const result = await db.query(`
+            SELECT ID_GENERO 
+            FROM GENERO 
+            WHERE NOME_GENERO ILIKE $1
+        `, [nome_genero]);
+
+        if (result.rowCount === 0) {
+            throw new Error(`Gênero "${nome_genero}" não encontrado.`);
+        }
+
+        return result.rows[0].id_genero;
+    } catch (e) {
+        console.error('Erro ao listar gêneros:', e);
+        throw e;
+    }
+}
+
 
 
 // Função para inserir filme
@@ -234,5 +255,6 @@ module.exports = {
     getFilmesFiltros,
     getSeriesFiltros,
     inserirFilme,
-    listarGeneros,
+    getGeneros,
+    getGenerosNome,
 };

@@ -46,15 +46,34 @@ async function getSeriesFiltros(req, res) {
 }
 
 // Função para listar todos os generos
-async function listarGeneros(req, res) {
+async function getGeneros(req, res) {
     try {
-        const generos = await service.listarGeneros();
+        const generos = await service.getGeneros();
         return res.status(200).json(generos);
     } catch (error) {
         console.error('Erro ao listar gêneros:', error);
         return res.status(500).json({ error: 'Erro ao listar gêneros' });
     }
 }
+
+// Função para listar os generos por nome
+async function getGenerosNome(req, res) {
+    const { nome_genero } = req.query;
+
+    try {
+        const idGenero = await service.getGenerosNome(nome_genero);
+        return res.status(200).json({ id_genero: idGenero });
+    } catch (error) {
+        console.error('Erro ao listar gêneros:', error.message);
+
+        if (error.message.includes('não encontrado')) {
+            return res.status(404).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: 'Erro interno ao listar gêneros.' });
+    }
+}
+
 
 
 async function inserirFilme(req, res) {
@@ -76,5 +95,6 @@ module.exports = {
     getFilmesFiltros,
     getSeriesFiltros,
     inserirFilme,
-    listarGeneros,
+    getGeneros,
+    getGenerosNome,
 };
