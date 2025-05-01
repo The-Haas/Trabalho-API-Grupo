@@ -75,27 +75,31 @@ async function getSerie() {
                                             s.SINOPSE_SERIE,
                                             TO_CHAR(s.DATA_LANCAMENTO, 'DD/MM/YYYY') AS DATA_LANCAMENTO,
                                             g.NOME_GENERO,
-                                            json_agg(
-                                                json_build_object(
+                                            COALESCE(json_agg(
+                                                DISTINCT jsonb_build_object(
                                                     'numero_temporada', t.NUMERO_TEMPORADA,
-                                                    'episodios', (
-                                                        SELECT json_agg(
-                                                            json_build_object(
-                                                                'numero_episodio', e.NUMERO_EPISODIO,
-                                                                'titulo_episodio', e.TITULO_EPISODIO,
-                                                                'duracao_episodio', e.DURACAO_EPISODIO
-                                                            )
-                                                        )
-                                                        FROM EPISODIOS e
-                                                        WHERE e.ID_TEMPORADA = t.ID_TEMPORADA
-                                                    )
+                                                    'episodios', COALESCE(ep.episodios, '[]')
                                                 )
-                                            ) AS temporadas
+                                            ) FILTER (WHERE t.ID_TEMPORADA IS NOT NULL), '[]') AS temporadas
                                         FROM SERIES s
                                         JOIN GENERO g ON s.ID_GENERO = g.ID_GENERO
-                                        JOIN TEMPORADAS t ON s.ID_SERIE = t.ID_SERIE
-                                        GROUP BY s.ID_SERIE, s.TITULO_SERIE, s.DATA_LANCAMENTO, g.NOME_GENERO
-                                        ORDER BY s.ID_SERIE
+                                        LEFT JOIN TEMPORADAS t ON s.ID_SERIE = t.ID_SERIE
+                                        LEFT JOIN (
+                                            SELECT 
+                                                e.ID_TEMPORADA,
+                                                json_agg(
+                                                    json_build_object(
+                                                        'numero_episodio', e.NUMERO_EPISODIO,
+                                                        'titulo_episodio', e.TITULO_EPISODIO,
+                                                        'duracao_episodio', e.DURACAO_EPISODIO
+                                                    )
+                                                ) AS episodios
+                                            FROM EPISODIOS e
+                                            GROUP BY e.ID_TEMPORADA
+                                        ) ep ON ep.ID_TEMPORADA = t.ID_TEMPORADA
+                                        GROUP BY s.ID_SERIE, g.NOME_GENERO
+                                        ORDER BY s.ID_SERIE;
+
                                      `);
         return result.rows;
 
@@ -115,25 +119,28 @@ async function getSeriesFiltros(titulo, ano, genero) {
                 s.SINOPSE_SERIE,
                 TO_CHAR(s.DATA_LANCAMENTO, 'DD/MM/YYYY') AS DATA_LANCAMENTO,
                 g.NOME_GENERO,
-                json_agg(
-                    json_build_object(
+                COALESCE(json_agg(
+                    DISTINCT jsonb_build_object(
                         'numero_temporada', t.NUMERO_TEMPORADA,
-                        'episodios', (
-                            SELECT json_agg(
-                                json_build_object(
-                                    'numero_episodio', e.NUMERO_EPISODIO,
-                                    'titulo_episodio', e.TITULO_EPISODIO,
-                                    'duracao_episodio', e.DURACAO_EPISODIO
-                                )
-                            )
-                            FROM EPISODIOS e
-                            WHERE e.ID_TEMPORADA = t.ID_TEMPORADA
-                        )
+                        'episodios', COALESCE(ep.episodios, '[]')
                     )
-                ) AS temporadas
+                ) FILTER (WHERE t.ID_TEMPORADA IS NOT NULL), '[]') AS temporadas
             FROM SERIES s
             JOIN GENERO g ON s.ID_GENERO = g.ID_GENERO
-            JOIN TEMPORADAS t ON s.ID_SERIE = t.ID_SERIE
+            LEFT JOIN TEMPORADAS t ON s.ID_SERIE = t.ID_SERIE
+            LEFT JOIN (
+                SELECT 
+                    e.ID_TEMPORADA,
+                    json_agg(
+                        json_build_object(
+                            'numero_episodio', e.NUMERO_EPISODIO,
+                            'titulo_episodio', e.TITULO_EPISODIO,
+                            'duracao_episodio', e.DURACAO_EPISODIO
+                        )
+                    ) AS episodios
+                FROM EPISODIOS e
+                GROUP BY e.ID_TEMPORADA
+            ) ep ON ep.ID_TEMPORADA = t.ID_TEMPORADA
             WHERE 1=1
         `;
 
@@ -155,7 +162,7 @@ async function getSeriesFiltros(titulo, ano, genero) {
         }
 
         query += `
-            GROUP BY s.ID_SERIE, s.TITULO_SERIE, s.DATA_LANCAMENTO, g.NOME_GENERO
+            GROUP BY s.ID_SERIE, g.NOME_GENERO
             ORDER BY s.ID_SERIE
         `;
 
@@ -609,16 +616,50 @@ async function putGenero(nome_antigo, nome_novo) {
 }
 
 
-/*
-*Rotas e Funções a Finalizar
 
 
-* Deletar Filmes
-* Deletar Series
-* Deletar Temporadas
-* Deletar Episodios
-* Deletar Generos
-*/
+async function deleteFilme(titulo) {
+    const result = await db.query(`DELETE FROM FILMES WHERE TITULO_FILME = $1 RETURNING *`, [titulo]);
+    if (result.rowCount === 0) throw new Error('Filme não encontrado.');
+    return { mensagem: `Filme "${titulo}" deletado com sucesso.` };
+}
+
+
+async function deleteSerie(titulo) {
+    const result = await db.query(`DELETE FROM SERIES WHERE TITULO_SERIE = $1 RETURNING *`, [titulo]);
+    if (result.rowCount === 0) throw new Error('Série não encontrada.');
+    return { mensagem: `Série "${titulo}" deletada com sucesso.` };
+}
+
+
+async function deleteTemporada(nomeSerie, numeroTemporada) {
+    const serie = await db.query(`SELECT ID_SERIE FROM SERIES WHERE TITULO_SERIE = $1`, [nomeSerie]);
+    if (serie.rowCount === 0) throw new Error('Série não encontrada.');
+
+    const result = await db.query(`DELETE FROM TEMPORADAS WHERE ID_SERIE = $1 AND NUMERO_TEMPORADA = $2 RETURNING *`, [serie.rows[0].id_serie, numeroTemporada]);
+    if (result.rowCount === 0) throw new Error('Temporada não encontrada.');
+    return { mensagem: `Temporada ${numeroTemporada} da série "${nomeSerie}" deletada com sucesso.` };
+}
+
+
+async function deleteEpisodio(nomeSerie, numeroTemporada, numeroEpisodio) {
+    const serie = await db.query(`SELECT ID_SERIE FROM SERIES WHERE TITULO_SERIE = $1`, [nomeSerie]);
+    if (serie.rowCount === 0) throw new Error('Série não encontrada.');
+
+    const temporada = await db.query(`SELECT ID_TEMPORADA FROM TEMPORADAS WHERE ID_SERIE = $1 AND NUMERO_TEMPORADA = $2`, [serie.rows[0].id_serie, numeroTemporada]);
+    if (temporada.rowCount === 0) throw new Error('Temporada não encontrada.');
+
+    const result = await db.query(`DELETE FROM EPISODIOS WHERE ID_TEMPORADA = $1 AND NUMERO_EPISODIO = $2 RETURNING *`, [temporada.rows[0].id_temporada, numeroEpisodio]);
+    if (result.rowCount === 0) throw new Error('Episódio não encontrado.');
+    return { mensagem: `Episódio ${numeroEpisodio} deletado com sucesso.` };
+}
+
+
+async function deleteGenero(nomeGenero) {
+    const result = await db.query(`DELETE FROM GENERO WHERE NOME_GENERO = $1 RETURNING *`, [nomeGenero]);
+    if (result.rowCount === 0) throw new Error('Gênero não encontrado.');
+    return { mensagem: `Gênero "${nomeGenero}" deletado com sucesso.` };
+}
 
 
 // Exporta as funções para serem usadas em outros arquivos
@@ -640,4 +681,10 @@ module.exports = {
     putSerie,
     putEpisodio,
     putGenero,
+
+    deleteFilme,
+    deleteSerie,
+    deleteTemporada,
+    deleteEpisodio,
+    deleteGenero,
 };

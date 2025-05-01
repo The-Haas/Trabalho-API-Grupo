@@ -362,7 +362,6 @@
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-
     Rota para Editar um Gênero
 
     Rota: http://localhost:3000/generos (Método PUT)
@@ -379,4 +378,71 @@
     {
         "mensagem": "Gênero \"Ação\" atualizado para \"Ação e Aventura\" com sucesso!",
         "id_genero": 1
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Deletar um Filme
+
+    Rota: http://localhost:3000/filmes/Rindo à Toa (Método DELETE)
+
+    Obs. Caso passar um filme que não existe, vai retornar um erro.
+
+    Exemplo de Retorno de Sucesso.
+    {
+        "mensagem": "Filme \"Rindo à Toa\" deletado com sucesso."
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Deletar um Episódio
+    
+    Rota: http://localhost:3000/episodios/Agentes do Caos/2/2 (Método DELETE)
+
+    Obs. Caso passar um Episódio que não existe, vai retornar um erro.
+
+    Exemplo de Retorno de Sucesso:
+    {
+        "mensagem": "Episódio 2 deletado com sucesso."
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Deletar uma Temporada
+
+    Rota: http://localhost:3000/temporadas/Agentes do Caos/2 (Método DELETE)
+
+    Obs. Caso passada uma temporada inexistente ou uma temporada que ainda tenha episódios dentro, irá retornar um erro.
+
+    Exemplo de Retorno de Sucesso:
+    {
+        "mensagem": "Temporada 2 da série \"Agentes do Caos\" deletada com sucesso."
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+    Rota para Deletar uma Série
+
+    Rota: http://localhost:3000/series/Agentes do Caos
+
+    Obs. Caso passada uma série inexistente, ou uma série que tenha temporadas, irá retornar um erro.
+
+    Exemplo de Retorno de Sucesso:
+    {
+        "mensagem": "Série \"Agentes do Caos\" deletada com sucesso."
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+    Rota para Deletar um Gênero
+
+    Rota: http://localhost:3000/generos/Teste
+
+    Obs. Caso passado um gênero inexistente, irá retornar um erro.
+
+    Exemplo de Retorno de Sucesso:
+    {
+        "mensagem": "Gênero \"Teste\" deletado com sucesso."
     }

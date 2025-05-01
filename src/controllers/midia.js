@@ -193,6 +193,57 @@ async function putGenero(req, res) {
 }
 
 
+async function deleteFilme(req, res) {
+    try {
+        const { titulo } = req.params;
+        const result = await service.deleteFilme(titulo);
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(404).json({ erro: err.message });
+    }
+}
+
+async function deleteSerie(req, res) {
+    try {
+        const { titulo } = req.params;
+        const result = await service.deleteSerie(titulo);
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(404).json({ erro: err.message });
+    }
+}
+
+async function deleteTemporada(req, res) {
+    try {
+        const { nomeSerie, numeroTemporada } = req.params;
+        const result = await service.deleteTemporada(nomeSerie, parseInt(numeroTemporada));
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(404).json({ erro: err.message });
+    }
+}
+
+async function deleteEpisodio(req, res) {
+    try {
+        const { nomeSerie, numeroTemporada, numeroEpisodio } = req.params;
+        const result = await service.deleteEpisodio(nomeSerie, parseInt(numeroTemporada), parseInt(numeroEpisodio));
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(404).json({ erro: err.message });
+    }
+}
+
+async function deleteGenero(req, res) {
+    try {
+        const { nomeGenero } = req.params;
+        const result = await service.deleteGenero(nomeGenero);
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(404).json({ erro: err.message });
+    }
+}
+
+
 module.exports = {
     getFilmes,
     getSerie,
@@ -211,4 +262,10 @@ module.exports = {
     putSerie,
     putEpisodio,
     putGenero,
+
+    deleteFilme,
+    deleteSerie,
+    deleteTemporada,
+    deleteEpisodio,
+    deleteGenero,
 };

@@ -19,4 +19,10 @@ module.exports = (app) => {
     app.put('/series', controller.putSerie)
     app.put('/episodios', controller.putEpisodio)
     app.put('/generos', controller.putGenero)
+
+    app.delete('/filmes/:titulo', controller.deleteFilme)
+    app.delete('/series/:titulo', controller.deleteSerie)
+    app.delete('/temporadas/:nomeSerie/:numeroTemporada', controller.deleteTemporada)
+    app.delete('/episodios/:nomeSerie/:numeroTemporada/:numeroEpisodio', controller.deleteEpisodio)
+    app.delete('/generos/:nomeGenero', controller.deleteGenero)    
 };
