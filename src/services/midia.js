@@ -424,14 +424,194 @@ async function postGenero(nome_genero) {
 }
 
 
+async function putFilme(titulo, duracao, sinopse, data_lancamento, nome_genero) {
+    try {
+        // Verificar se o gênero existe
+        const generoResult = await db.query(`
+            SELECT ID_GENERO 
+            FROM GENERO 
+            WHERE NOME_GENERO = $1
+        `, [nome_genero]);
+
+        if (generoResult.rowCount === 0) {
+            throw new Error(`Gênero "${nome_genero}" não encontrado.`);
+        }
+
+        const id_genero = generoResult.rows[0].id_genero;
+
+        // Verificar se o filme existe
+        const filmeExistente = await db.query(`
+            SELECT ID_FILME 
+            FROM FILMES 
+            WHERE TITULO_FILME = $1
+        `, [titulo]);
+
+        if (filmeExistente.rowCount === 0) {
+            throw new Error(`Filme "${titulo}" não encontrado. Não foi possível editar.`);
+        }
+
+        // Atualizar o filme
+        const updateResult = await db.query(`
+            UPDATE FILMES
+            SET DURACAO_FILME = $1, SINOPSE_FILME = $2, DATA_LANCAMENTO = $3, ID_GENERO = $4
+            WHERE TITULO_FILME = $5
+            RETURNING ID_FILME;
+        `, [duracao, sinopse, data_lancamento, id_genero, titulo]);
+
+        return {
+            mensagem: `Filme "${titulo}" editado com sucesso!`,
+            id_filme: updateResult.rows[0].id_filme
+        };
+
+    } catch (e) {
+        console.error('Erro ao editar filme:', e.message);
+        throw e;
+    }
+}
+
+
+async function putSerie(titulo, sinopse, data_lancamento, nome_genero) {
+    try {
+        // Verificar se o gênero existe
+        const generoResult = await db.query(`
+            SELECT ID_GENERO 
+            FROM GENERO 
+            WHERE NOME_GENERO = $1
+        `, [nome_genero]);
+
+        if (generoResult.rowCount === 0) {
+            throw new Error(`Gênero "${nome_genero}" não encontrado.`);
+        }
+
+        const id_genero = generoResult.rows[0].id_genero;
+
+        // Verificar se a série existe
+        const serieExistente = await db.query(`
+            SELECT ID_SERIE 
+            FROM SERIES 
+            WHERE TITULO_SERIE = $1
+        `, [titulo]);
+
+        if (serieExistente.rowCount === 0) {
+            throw new Error(`Série "${titulo}" não encontrada. Não foi possível editar.`);
+        }
+
+        // Atualizar a série
+        const updateResult = await db.query(`
+            UPDATE SERIES
+            SET SINOPSE_SERIE = $1, DATA_LANCAMENTO = $2, ID_GENERO = $3
+            WHERE TITULO_SERIE = $4
+            RETURNING ID_SERIE;
+        `, [sinopse, data_lancamento, id_genero, titulo]);
+
+        return {
+            mensagem: `Série "${titulo}" editada com sucesso!`,
+            id_serie: updateResult.rows[0].id_serie
+        };
+
+    } catch (e) {
+        console.error('Erro ao editar série:', e.message);
+        throw e;
+    }
+}
+
+
+
+async function putEpisodio(nome_serie, numero_temporada, numero_episodio, titulo_episodio, duracao_episodio) {
+    try {
+        // Verificar se a série existe
+        const serieResult = await db.query(`
+            SELECT ID_SERIE 
+            FROM SERIES 
+            WHERE TITULO_SERIE = $1
+        `, [nome_serie]);
+
+        if (serieResult.rowCount === 0) {
+            throw new Error(`Série "${nome_serie}" não encontrada.`);
+        }
+
+        const id_serie = serieResult.rows[0].id_serie;
+
+        // Verificar se a temporada existe
+        const temporadaResult = await db.query(`
+            SELECT ID_TEMPORADA 
+            FROM TEMPORADAS 
+            WHERE ID_SERIE = $1 AND NUMERO_TEMPORADA = $2
+        `, [id_serie, numero_temporada]);
+
+        if (temporadaResult.rowCount === 0) {
+            throw new Error(`Temporada ${numero_temporada} não encontrada para a série "${nome_serie}".`);
+        }
+
+        const id_temporada = temporadaResult.rows[0].id_temporada;
+
+        // Verificar se o episódio existe
+        const episodioExistente = await db.query(`
+            SELECT ID_EPISODIO 
+            FROM EPISODIOS 
+            WHERE ID_TEMPORADA = $1 AND NUMERO_EPISODIO = $2
+        `, [id_temporada, numero_episodio]);
+
+        if (episodioExistente.rowCount === 0) {
+            throw new Error(`Episódio ${numero_episodio} não encontrado na temporada ${numero_temporada} da série "${nome_serie}".`);
+        }
+
+        // Atualizar o episódio
+        const updateResult = await db.query(`
+            UPDATE EPISODIOS
+            SET TITULO_EPISODIO = $1, DURACAO_EPISODIO = $2
+            WHERE ID_TEMPORADA = $3 AND NUMERO_EPISODIO = $4
+            RETURNING ID_EPISODIO;
+        `, [titulo_episodio, duracao_episodio, id_temporada, numero_episodio]);
+
+        return {
+            mensagem: `Episódio ${numero_episodio} da temporada ${numero_temporada} da série "${nome_serie}" editado com sucesso!`,
+            id_episodio: updateResult.rows[0].id_episodio
+        };
+
+    } catch (e) {
+        console.error('Erro ao editar episódio:', e.message);
+        throw e;
+    }
+}
+
+
+async function putGenero(nome_antigo, nome_novo) {
+    try {
+        // Verificar se o gênero com nome antigo existe
+        const generoExistente = await db.query(`
+            SELECT ID_GENERO 
+            FROM GENERO 
+            WHERE NOME_GENERO = $1
+        `, [nome_antigo]);
+
+        if (generoExistente.rowCount === 0) {
+            throw new Error(`Gênero "${nome_antigo}" não encontrado.`);
+        }
+
+        // Atualizar o nome do gênero
+        const updateResult = await db.query(`
+            UPDATE GENERO
+            SET NOME_GENERO = $1
+            WHERE NOME_GENERO = $2
+            RETURNING ID_GENERO;
+        `, [nome_novo, nome_antigo]);
+
+        return {
+            mensagem: `Gênero "${nome_antigo}" atualizado para "${nome_novo}" com sucesso!`,
+            id_genero: updateResult.rows[0].id_genero
+        };
+
+    } catch (e) {
+        console.error('Erro ao editar gênero:', e.message);
+        throw e;
+    }
+}
+
+
 /*
 *Rotas e Funções a Finalizar
 
-* Editar Filmes
-* Editar Series
-* Editar Temporadas
-* Editar Episodios
-* Editar Generos
 
 * Deletar Filmes
 * Deletar Series
@@ -455,4 +635,9 @@ module.exports = {
     postTemporada,
     postEpisodio,
     postGenero,
+
+    putFilme,
+    putSerie,
+    putEpisodio,
+    putGenero,
 };

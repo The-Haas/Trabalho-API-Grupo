@@ -141,6 +141,58 @@ async function postGenero(req, res) {
 }
 
 
+async function putFilme(req, res) {
+    const { titulo, duracao, sinopse, data_lancamento, nome_genero } = req.body;
+
+    try {
+        const result = await service.putFilme(titulo, duracao, sinopse, data_lancamento, nome_genero);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('Erro ao editar filme:', error);
+        return res.status(500).json({ error: 'Erro ao editar filme' });
+    }
+}
+
+
+async function putSerie(req, res) {
+    const { titulo, sinopse, data_lancamento, nome_genero } = req.body;
+
+    try {
+        const result = await service.putSerie(titulo, sinopse, data_lancamento, nome_genero);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('Erro ao editar série:', error);
+        return res.status(500).json({ error: 'Erro ao editar série' });
+    }
+}
+
+
+async function putEpisodio(req, res) {
+    const { nome_serie, numero_temporada, numero_episodio, titulo_episodio, duracao_episodio } = req.body;
+
+    try {
+        const result = await service.putEpisodio(nome_serie, numero_temporada, numero_episodio, titulo_episodio, duracao_episodio);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('Erro ao editar episódio:', error);
+        return res.status(500).json({ error: 'Erro ao editar episódio' });
+    }
+}
+
+
+async function putGenero(req, res) {
+    const { nome_antigo, nome_novo } = req.body;
+
+    try {
+        const result = await service.putGenero(nome_antigo, nome_novo);
+        return res.status(200).json(result);
+    } catch (error) {
+        console.error('Erro ao editar gênero:', error);
+        return res.status(500).json({ error: 'Erro ao editar gênero' });
+    }
+}
+
+
 module.exports = {
     getFilmes,
     getSerie,
@@ -154,4 +206,9 @@ module.exports = {
     postTemporada,
     postEpisodio,
     postGenero,
+
+    putFilme,
+    putSerie,
+    putEpisodio,
+    putGenero,
 };

@@ -14,4 +14,9 @@ module.exports = (app) => {
     app.post('/temporadas', controller.postTemporada)
     app.post('/episodios', controller.postEpisodio)
     app.post('/generos', controller.postGenero)
+
+    app.put('/filmes', controller.putFilme)
+    app.put('/series', controller.putSerie)
+    app.put('/episodios', controller.putEpisodio)
+    app.put('/generos', controller.putGenero)
 };

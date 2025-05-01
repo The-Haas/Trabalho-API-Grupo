@@ -277,7 +277,7 @@
 
     Rota para Inserir um Novo Gênero
 
-    Rota: http://localhost:3000/generos
+    Rota: http://localhost:3000/generos (Método POST)
 
     Obs. Caso passar um gênero já existente, vai retornar um erro.
 
@@ -292,6 +292,91 @@
         "id_genero": 41
     }
 
-    --------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
 
-    
+    Rota para Editar um Filme
+
+    Rota: http://localhost:3000/filmes (Método PUT)
+
+    Obs. Caso passar um nome de Filmes ou algum Parametro faltando ou inexistente, vai retornar um erro
+
+    Parametros a Serem Enviados(Exemplo):
+    {
+        "titulo": "Testessse1w",
+        "duracao": 136,
+        "sinopse": "Um hacker descobre a verdade sobre sua realidade.",
+        "data_lancamento": "2016-07-15",
+        "nome_genero": "Romance"
+    }       
+
+    Exemplo de Retorno Sucesso:
+    {
+        "mensagem": "Filme \"Testessse1w\" editado com sucesso!",
+        "id_filme": 60
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Editar uma Série
+
+    Rota: http://localhost:3000/series (Método PUT)
+
+    Obs. Caso passar um nome de Série ou algum Parametro faltando ou inexistente, vai retornar um erro.
+
+    Parametros a Serem Enviados (Exemplo):
+    {
+        "titulo": "Agentes do Caos",
+        "sinopse": "Nova sinopse da série",
+        "data_lancamento": "2025-06-01",
+        "nome_genero": "Drama"
+    }
+
+    Exemplo de Retorno Sucesso:
+    {
+        "mensagem": "Série \"Agentes do Caos\" editada com sucesso!",
+        "id_serie": 1
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Editar um Episódio
+
+    Rota: http://localhost:3000/episodios (Método PUT)
+
+    Obs. Caso passar um Nome de Série, Temporada ou Episódio Inexistente, vai retornar um erro.
+
+    Parametros a Serem Enviados (Exemplo):
+    {
+        "nome_serie": "Agentes do Caos",
+        "numero_temporada": 2,
+        "numero_episodio": 1,
+        "titulo_episodio": "Novo Título do Episódio",
+        "duracao_episodio": 45
+    }
+
+    Exemplo de Retorno Sucesso:
+    {
+        "mensagem": "Episódio 1 da temporada 2 da série \"Agentes do Caos\" editado com sucesso!",
+        "id_episodio": 25
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+    Rota para Editar um Gênero
+
+    Rota: http://localhost:3000/generos (Método PUT)
+
+    Obs. Caso passar um nome de Gênero que não existe, irá retornar um erro.
+
+    Parâmetros a Serem Enviados (Exemplos):
+    {
+        "nome_antigo": "Ação",
+        "nome_novo": "Ação e Aventura"
+    }
+
+    Exemplo de Retorno Sucesso:
+    {
+        "mensagem": "Gênero \"Ação\" atualizado para \"Ação e Aventura\" com sucesso!",
+        "id_genero": 1
+    }
