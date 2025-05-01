@@ -9,5 +9,9 @@ module.exports = (app) => {
     app.get('/generos', controller.getGeneros)
     app.get('/generos/nome', controller.getGenerosNome)
     
-    app.post('/filmes', controller.inserirFilme)
+    app.post('/filmes', controller.postFilme)
+    app.post('/series', controller.postSerie)
+    app.post('/temporadas', controller.postTemporada)
+    app.post('/episodios', controller.postEpisodio)
+    app.post('/generos', controller.postGenero)
 };

@@ -76,15 +76,67 @@ async function getGenerosNome(req, res) {
 
 
 
-async function inserirFilme(req, res) {
+async function postFilme(req, res) {
     const { titulo, duracao, sinopse, data_lancamento, nome_genero } = req.body;
 
     try {
-        const result = await service.inserirFilme(titulo, duracao, sinopse, data_lancamento, nome_genero);
+        const result = await service.postFilme(titulo, duracao, sinopse, data_lancamento, nome_genero);
         return res.status(201).json(result);
     } catch (error) {
         console.error('Erro ao inserir filme:', error);
         return res.status(500).json({ error: 'Erro ao inserir filme' });
+    }
+}
+
+
+async function postSerie(req, res) {
+    const { titulo, sinopse, data_lancamento, nome_genero } = req.body;
+
+    try {
+        const result = await service.postSerie(titulo, sinopse, data_lancamento, nome_genero);
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error('Erro ao inserir série:', error);
+        return res.status(500).json({ error: 'Erro ao inserir série' });
+    }
+}
+
+
+async function postTemporada(req, res) {
+    const { nome_serie, numero_temporada } = req.body;
+
+    try {
+        const result = await service.postTemporada(nome_serie, numero_temporada);
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error('Erro ao inserir temporada:', error.message);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+
+async function postEpisodio(req, res) {
+    const { nome_serie, numero_temporada, numero_episodio, titulo_episodio, duracao_episodio } = req.body;
+
+    try {
+        const result = await service.postEpisodio(nome_serie, numero_temporada, numero_episodio, titulo_episodio, duracao_episodio);
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error('Erro ao inserir episódio:', error.message);
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+
+async function postGenero(req, res) {
+    const { nome_genero } = req.body;
+
+    try {
+        const result = await service.postGenero(nome_genero);
+        return res.status(201).json(result);
+    } catch (error) {
+        console.error('Erro ao inserir gênero:', error.message);
+        return res.status(500).json({ error: error.message });
     }
 }
 
@@ -94,7 +146,12 @@ module.exports = {
     getSerie,
     getFilmesFiltros,
     getSeriesFiltros,
-    inserirFilme,
     getGeneros,
     getGenerosNome,
+
+    postFilme,
+    postSerie,
+    postTemporada,
+    postEpisodio,
+    postGenero,
 };

@@ -171,7 +171,7 @@
     },
   ]
 
-  --------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
 
     Rota para Retornar os Gêneros por nome 
     (Retorna um Json com o id do gênero)
@@ -182,3 +182,116 @@
     {
         "id_genero": 6
     }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Inserir um novo Filme no Banco de dados
+
+    Rota: http://localhost:3000/filmes (Métodos POST)
+
+    Obs. Caso não passar nenhum parametro, irá retornar um erro.
+    Obs. Caso informar o nome de um gênero que não existe, vai retornar um erro.
+
+    Parametros a serem enviados(exemplo):
+    {
+        "titulo": "Testee",
+        "duracao": 136,
+        "sinopse": "Um hacker descobre a verdade sobre sua realidade.",
+        "data_lancamento": "1999-03-31",
+        "nome_genero": "Ação"
+    }
+
+
+    Exemplo de Retorno Sucesso:
+    {
+        "mensagem": "Filme inserido com sucesso!",
+        "id_filme": 60
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Inserir uma nova Série no Banco de dados
+
+    Rota: http://localhost:3000/series (Métodos POST)
+
+    Obs. Caso não passar nenhum parametro, irá retornar um erro.
+    Obs. Caso informar o nome de um gênero que não existe, vai retornar um erro.
+
+     Parametros a serem enviados(exemplo):
+     {
+        "titulo": "Stranger Things",
+        "sinopse": "Um grupo de crianças enfrenta eventos sobrenaturais em sua cidade.",
+        "data_lancamento": "2016-07-15",
+        "nome_genero": "Romance"
+    }
+
+    Exemplo de Retorno Sucesso: 
+    {
+        "mensagem": "Série inserida com sucesso!",
+        "id_serie": 21
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Inserir uma nova Temporada a uma Série Existente
+
+    Rota: http://localhost:3000/temporadas (Método POST)
+
+    Obs. Caso passar o nome de uma série que não existe, irá retornar um erro.
+
+    Parametros a serem enviados(exemplo):
+    {
+        "nome_serie": "Stranger Thidngs",
+        "numero_temporada": 4
+    }
+
+    Exemplo de Retorno Sucesso:
+    {
+        "mensagem": "Temporada 5 da série \"Stranger Things\" inserida com sucesso!",
+        "id_temporada": 35
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Inserir um Novo Episódio a uma Temporada Existente de uma Série Existente
+
+    Rota: http://localhost:3000/episodios (Método POST)
+
+    Obs. Caso passar o nome da série ou uma temporada inexistente, vai retornar um erro.
+
+    Parametros a serem enviados(exemplo):
+    {
+        "nome_serie": "Stranger Things",
+        "numero_temporada": 1,
+        "numero_episodio": 1,
+        "titulo_episodio": "Teste",
+        "duracao_episodio": 45
+    }
+
+    Exemplo de Retorno Sucesso:
+    {
+       "mensagem": "Episódio inserido com sucesso na temporada 1 da série \"Stranger Things\"."
+    }
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+    Rota para Inserir um Novo Gênero
+
+    Rota: http://localhost:3000/generos
+
+    Obs. Caso passar um gênero já existente, vai retornar um erro.
+
+    Parametros a serem enviados(exemplo):
+    {
+     "nome_genero": "Teste"
+    }
+
+    Exemplo de Retorno sucesso:
+    {
+       "mensagem": "Gênero inserido com sucesso!",
+        "id_genero": 41
+    }
+
+    --------------------------------------------------------------------------------------------------------------------------------
+
+    
