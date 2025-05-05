@@ -36,7 +36,7 @@ Este é um trabalho proposto pelo Prof. GABRIEL LUIZ KUNZ na matéria de Linguag
 | GET    | `/series`         | Lista todas as séries                  |
 | GET    | `/series/filtros` | Retorna as séries pelos filtros        |
 | POST   | `/series`         | Cria uma nova série                    |
-| PUT    | `/series/`        | Atualiza uma série pelo nome           |
+| PUT    | `/series`         | Atualiza uma série pelo nome           |
 | DELETE | `/series/:nome`   | Remove uma série pelo nome             |
 
 ---
@@ -66,7 +66,7 @@ Este é um trabalho proposto pelo Prof. GABRIEL LUIZ KUNZ na matéria de Linguag
 | ------ | ---------------- | ----------------------------- |
 | GET    | `/generos`       | Lista todos os gêneros        |
 | POST   | `/generos`       | Cria um novo gênero           |
-| PUT    | `/generos/`      | Atualiza um gênero específico |
+| PUT    | `/generos`       | Atualiza um gênero específico |
 | DELETE | `/generos/:nome` | Remove um gênero específico   |
 
 ---
