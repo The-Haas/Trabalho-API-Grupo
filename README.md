@@ -19,25 +19,25 @@ Este é um trabalho proposto pelo Prof. GABRIEL LUIZ KUNZ na matéria de Linguag
 
 ### 🎬 Filmes
 
-| Método | Rota            | Descrição                             |
-| ------ | --------------- | ------------------------------------- |
-| GET    | `/filmes`       | Lista todos os filmes                 |
-| GET    | `/filmes/:nome` | Retorna um filme específico pelo nome |
-| POST   | `/filmes`       | Cria um novo filme                    |
-| PUT    | `/filmes/:nome` | Atualiza um filme pelo nome           |
-| DELETE | `/filmes/:nome` | Remove um filme pelo nome             |
+| Método | Rota              | Descrição                             |
+| ------ | ---------------   | ------------------------------------- |
+| GET    | `/filmes`         | Lista todos os filmes                 |
+| GET    | `/filmes/filtros` | Retorna os filmes pelos filtros       |
+| POST   | `/filmes`         | Cria um novo filme                    |
+| PUT    | `/filmes`         | Atualiza um filme pelo nome           |
+| DELETE | `/filmes/:nome`   | Remove um filme pelo nome             |
 
 ---
 
 ### 📺 Séries
 
-| Método | Rota            | Descrição                              |
-| ------ | --------------- | -------------------------------------- |
-| GET    | `/series`       | Lista todas as séries                  |
-| GET    | `/series/:nome` | Retorna uma série específica pelo nome |
-| POST   | `/series`       | Cria uma nova série                    |
-| PUT    | `/series/:nome` | Atualiza uma série pelo nome           |
-| DELETE | `/series/:nome` | Remove uma série pelo nome             |
+| Método | Rota              | Descrição                              |
+| ------ | ---------------   | -------------------------------------- |
+| GET    | `/series`         | Lista todas as séries                  |
+| GET    | `/series/filtros` | Retorna as séries pelos filtros        |
+| POST   | `/series`         | Cria uma nova série                    |
+| PUT    | `/series/`        | Atualiza uma série pelo nome           |
+| DELETE | `/series/:nome`   | Remove uma série pelo nome             |
 
 ---
 
@@ -45,10 +45,7 @@ Este é um trabalho proposto pelo Prof. GABRIEL LUIZ KUNZ na matéria de Linguag
 
 | Método | Rota                             | Descrição                         |
 | ------ | -------------------------------- | --------------------------------- |
-| GET    | `/temporadas`                    | Lista todas as temporadas         |
-| GET    | `/temporadas/:nomeSerie/:numero` | Retorna uma temporada específica  |
 | POST   | `/temporadas`                    | Cria uma nova temporada           |
-| PUT    | `/temporadas/:nomeSerie/:numero` | Atualiza uma temporada específica |
 | DELETE | `/temporadas/:nomeSerie/:numero` | Remove uma temporada específica   |
 
 ---
@@ -57,10 +54,8 @@ Este é um trabalho proposto pelo Prof. GABRIEL LUIZ KUNZ na matéria de Linguag
 
 | Método | Rota                                           | Descrição                       |
 | ------ | ---------------------------------------------- | ------------------------------- |
-| GET    | `/episodios`                                   | Lista todos os episódios        |
-| GET    | `/episodios/:nomeSerie/:numeroTemporada/:nome` | Retorna um episódio específico  |
 | POST   | `/episodios`                                   | Cria um novo episódio           |
-| PUT    | `/episodios/:nomeSerie/:numeroTemporada/:nome` | Atualiza um episódio específico |
+| PUT    | `/episodios`                                   | Atualiza um episódio específico |
 | DELETE | `/episodios/:nomeSerie/:numeroTemporada/:nome` | Remove um episódio específico   |
 
 ---
@@ -70,11 +65,8 @@ Este é um trabalho proposto pelo Prof. GABRIEL LUIZ KUNZ na matéria de Linguag
 | Método | Rota             | Descrição                     |
 | ------ | ---------------- | ----------------------------- |
 | GET    | `/generos`       | Lista todos os gêneros        |
-| GET    | `/generos/:nome` | Retorna um gênero específico  |
 | POST   | `/generos`       | Cria um novo gênero           |
-| PUT    | `/generos/:nome` | Atualiza um gênero específico |
+| PUT    | `/generos/`      | Atualiza um gênero específico |
 | DELETE | `/generos/:nome` | Remove um gênero específico   |
 
 ---
-
-Se quiser, posso gerar essa documentação em formato **Markdown com código-fonte (c/ exemplos de JSON)** ou montar uma versão para o **Swagger/OpenAPI**. Deseja isso também?
