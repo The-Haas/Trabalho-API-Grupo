@@ -300,6 +300,52 @@ Retorna as séries pelos filtros (`titulo`, `ano`, `genero`).
 
 **Exemplo de URL:** `/series/filtros?ano=2017&genero=ação&titulo=agente`
 
+**Response:**
+```json
+[
+    {
+        "id_serie": 1,
+        "titulo_serie": "Agentes do Caos",
+        "sinopse_serie": "Agentes secretos combatem conspirações.",
+        "data_lancamento": "10/09/2017",
+        "nome_genero": "Ação",
+        "temporadas": [
+            {
+                "numero_temporada": 1,
+                "episodios": [
+                    {
+                        "numero_episodio": 1,
+                        "titulo_episodio": "Início do Caos",
+                        "duracao_episodio": 45
+                    },
+                    {
+                        "numero_episodio": 2,
+                        "titulo_episodio": "teste de episodio 2",
+                        "duracao_episodio": 30
+                    }
+                ]
+            },
+            {
+                "numero_temporada": 2,
+                "episodios": [
+                    {
+                        "numero_episodio": 1,
+                        "titulo_episodio": "teste temp 2",
+                        "duracao_episodio": 45
+                    },
+                    {
+                        "numero_episodio": 2,
+                        "titulo_episodio": "teste temp 21",
+                        "duracao_episodio": 50
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
+
+
 #### `POST /series`  
 Cria uma nova série.
 
